@@ -10,5 +10,9 @@
   {
     "Package": "NETStandard.*",
     "Ignore": true
+  },
+  {
+    "Package": "xunit*",
+    "License": "Apache-2.0"
   }
 ]

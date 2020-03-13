@@ -26,12 +26,26 @@ namespace LicenseInspector
 
             if (!File.Exists(options.ConfigPath))
             {
-                Log.Error($"Cannot find config file at: {options.ConfigPath}");
+                if (Path.IsPathRooted(options.ConfigPath))
+                {
+                    Log.Error($"Cannot find config file at: {options.ConfigPath}");
+                }
+                else
+                {
+                    Log.Error($"Cannot find config file at: {options.ConfigPath} (full path: {Path.GetFullPath(options.ConfigPath)})");
+                }
                 return;
             }
 
             Log.Information("Starting processing");
-            Log.Information($"Scanning {options.Root}");
+            if (Path.IsPathRooted(options.Root))
+            {
+                Log.Information($"Scanning {options.Root}");
+            }
+            else
+            {
+                Log.Information($"Scanning {options.Root} (full path: {Path.GetFullPath(options.Root)})");
+            }
             Log.Information($"Using config from {new FileInfo(options.ConfigPath).FullName}");
 
             string configStr = File.ReadAllText(options.ConfigPath);
@@ -56,7 +70,7 @@ namespace LicenseInspector
             Log.Information($"Using license policies from {config.LicensePolicies}");
             Log.Information($"Using license information from {config.LicenseInfo}");
 
-            IFileAccess fileAccess = FileAccess.GetAccessor(options.Root);
+            IFileAccess fileAccess = FileAccess.GetAccessor();
             var (dependencyScanner, licenseScanner) = await GetPlatformScanners(platform, fileAccess, config);
 
             Log.Debug($"Scanning for {platform} dependencies");
@@ -96,7 +110,6 @@ namespace LicenseInspector
             return platform switch
             {
                 "dotnet" => await DotNet.DotNet.Create(fileAccess, config),
-                "js" => await JavaScript.JavaScript.Create(fileAccess, config),
                 _ => throw new ArgumentException($"Invalid platform: {platform}")
             };
         }

@@ -31,9 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core\LicenseInspector.csproj" />
+    <ProjectReference Include="..\Core\Core\LicenseInspector.Core.csproj" />
     <ProjectReference Include="..\DotNet\DotNet\LicenseInspector.DotNet.csproj" />
-    <ProjectReference Include="..\JavaScript\LicenseInspector.JavaScript\LicenseInspector.JavaScript.csproj" />
   </ItemGroup>
 
   <ItemGroup>

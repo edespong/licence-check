@@ -3,12 +3,12 @@
   "LicensePolicies": "",
   "LicenseInfo": "",
 
-  "MinimumLicenseConfidenceThreshold": 0.92,
+  "MinimumLicenseConfidenceThreshold": 0.90,
 
   "IgnoreDuplicatePackages": true,
 
   "DiskCache": {
-    "CacheRoot": "c:\\temp\\packages",
+    "CacheRoot": "c:\\temp\\license-inspector",
     "ResolvedDependencies": {
       "DoCache": true,
       "MaxAge": "21.00:00:00"
@@ -19,7 +19,7 @@
     },
     "ResolvedLicenses": {
       "DoCache": true,
-      "MaxAge": "21.00:00:00"
+      "MaxAge": "7.00:00:00"
     },
     "NuGetCatalogIndex": {
       "DoCache": true,

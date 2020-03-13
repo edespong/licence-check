@@ -90,9 +90,10 @@ namespace LicenseInspector
                 return new LicensedPackage(package.Id, package.Version, packageDetails.License);
             }
 
-            if (packageDetails.LicenseUrl == null)
+            string deprecated = "https://aka.ms/deprecateLicenseUrl";
+            if (packageDetails.LicenseUrl == null || packageDetails.LicenseUrl.ToString() == deprecated)
             {
-                Log.Information($"{package} has no license URL");
+                Log.Information($"{package} has no valid license URL");
                 return await GetLicenseFromProject(package, packageDetails.PackageUrl);
             }
 
@@ -123,7 +124,7 @@ namespace LicenseInspector
             }
 
             return package
-                .With(AnalysisState.Error, $"Package has not valid license URL and the license could not be guessed.")
+                .With(AnalysisState.Error, $"Package has no valid license URL and the license could not be guessed.")
                 .Attach(License.NonEvaluated);
         }
 
@@ -201,7 +202,8 @@ namespace LicenseInspector
             // Final url should be like: https://raw.githubusercontent.com/USER/PROJECT/master/LICENSE.md
             return new[] {
                 new Uri(uri + "master/LICENSE"),
-                new Uri(uri + "master/LICENSE.md")
+                new Uri(uri + "master/LICENSE.md"),
+                new Uri(uri + "master/License.md")
             };
         }
 
