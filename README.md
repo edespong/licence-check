@@ -41,13 +41,13 @@ take a significant amount of time. If you want to reduce the time for this, you
 can run the following script.
 
 ### Windows
-> New-Item -ItemType Directory -Force c:\temp\licenceInspector | Out-Null
+> New-Item -ItemType Directory -Force c:\temp\licence-inspector | Out-Null
 
-> Invoke-WebRequest https://www.dropbox.com/s/017ho23wr6zt66f/nugetPagesCache.zip?dl=1 -OutFile c:\temp\licenceInspector\nugetPagesCache.zip
+> Invoke-WebRequest https://www.dropbox.com/s/017ho23wr6zt66f/nugetPagesCache.zip?dl=1 -OutFile c:\temp\licence-inspector\nugetPagesCache.zip
 
-> Expand-Archive c:\temp\licenceInspector\nugetPagesCache.zip c:\temp\licence-inspector
+> Expand-Archive c:\temp\licence-inspector\nugetPagesCache.zip c:\temp\licence-inspector
 
-> Remove-Item c:\temp\licenceInspector\nugetPagesCache.zip
+> Remove-Item c:\temp\licence-inspector\nugetPagesCache.zip
 
 ## License detection
 
