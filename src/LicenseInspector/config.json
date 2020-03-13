@@ -1,0 +1,37 @@
+﻿{
+  "PackagePolicies": "",
+  "LicensePolicies": "",
+  "LicenseInfo": "",
+
+  "MinimumLicenseConfidenceThreshold": 0.92,
+
+  "IgnoreDuplicatePackages": true,
+
+  "DiskCache": {
+    "CacheRoot": "c:\\temp\\packages",
+    "ResolvedDependencies": {
+      "DoCache": true,
+      "MaxAge": "21.00:00:00"
+    },
+    "LicenseFiles": {
+      "DoCache": true,
+      "MaxAge": "21.00:00:00"
+    },
+    "ResolvedLicenses": {
+      "DoCache": true,
+      "MaxAge": "21.00:00:00"
+    },
+    "NuGetCatalogIndex": {
+      "DoCache": true,
+      "MaxAge": "1.00:00:00"
+    },
+    "NuGetIndex": {
+      "DoCache": true,
+      "MaxAge": "1.00:00:00"
+    },
+    "NuGetDetails": {
+      "DoCache": true,
+      "MaxAge": "21.00:00:00"
+    }
+  }
+}

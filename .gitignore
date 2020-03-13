@@ -6,3 +6,4 @@
 /src/**/obj
 /src/LicenseInspector/Properties/launchSettings.json
 *.suo
+/.vs/

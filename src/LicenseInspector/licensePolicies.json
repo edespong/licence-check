@@ -1,0 +1,22 @@
+﻿[
+  {
+    "License": "<unknown>",
+    "Allow": false
+  },
+  {
+    "License": "<internal>",
+    "Allow": true
+  },
+  {
+    "License": "Apache-2.0",
+    "Allow": true
+  },
+  {
+    "License": "MIT",
+    "Allow": true
+  },
+  {
+    "License": "GPL-2.0-*",
+    "Allow": false
+  }
+]

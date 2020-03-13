@@ -1,0 +1,14 @@
+﻿[
+  {
+    "Package": "System.*",
+    "Ignore": true
+  },
+  {
+    "Package": "Microsoft.*",
+    "Ignore": true
+  },
+  {
+    "Package": "NETStandard.*",
+    "Ignore": true
+  }
+]

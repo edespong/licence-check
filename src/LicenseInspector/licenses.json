@@ -1,0 +1,26 @@
+﻿[
+  {
+    "License": "Apache-2.0",
+    "KnownUrls": [
+      "http://www.apache.org/licenses/LICENSE-2.0.html",
+      "http://aws.amazon.com/apache2.0",
+      "http://opensource.org/licenses/Apache-2.0",
+      "https://licenses.nuget.org/Apache-2.0"
+    ]
+  },
+  {
+    "License": "MIT",
+    "KnownUrls": [
+      "http://www.opensource.org/licenses/MIT",
+      "http://www.opensource.org/licenses/mit-license.php",
+      "https://licenses.nuget.org/MIT",
+      "https://github.com/DefinitelyTyped/NugetAutomation/blob/master/LICENSE.MIT"
+    ]
+  },
+  {
+    "License": "MS-PL",
+    "KnownUrls": [
+      "http://opensource.org/licenses/ms-pl"
+    ]
+  }
+]
