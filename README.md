@@ -28,7 +28,7 @@ have gotten everything up-and-running, it can be easily tweaked to suite your
 needs.
 
 
-> git clone https://github.com/edespong/licence-inspector.git
+> git clone https://github.com/edespong/license-inspector.git
 
 > cd license-inspector
 
