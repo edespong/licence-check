@@ -17,6 +17,69 @@ There are many good commercial options available where this functionality is
 provided, often in combination with security analysis. See [Software Composition Analysis](https://www.google.com/search?q=Software+Composition+Analysis+license&oq=Software+Composition+Analysis)
 if you need something with commercial support.
 
+## Example output 
+
+JSON:
+```javascript
+[
+  {
+    "Package": {
+      "Id": "Newtonsoft.Json",
+      "Version": "12.0.3",
+      "Messages": [],
+      "State": "Ok",
+      "License": "MIT",
+      "Result": "Ok",
+      "Remark": ""
+    },
+    "Dependencies": []
+  },
+  {
+    "Package": {
+      "Id": "Serilog.Sinks.Console",
+      "Version": "3.1.1",
+      "Messages": [],
+      "State": "Ok",
+      "License": "Apache-2.0",
+      "Result": "Ok",
+      "Remark": ""
+    },
+    "Dependencies": [
+      {
+        "Package": {
+          "Id": "Serilog",
+          "Version": "2.5.0",
+          "Messages": [],
+          "State": "Ok",
+          "License": "Apache-2.0",
+          "Result": "Ok",
+          "Remark": ""
+        },
+        "Dependencies": []
+      }
+    ]
+  }
+  ...
+]
+```
+
+Human readable:
+```
+- CommandLineParser 2.7.82                                         MIT                  Ok
+- Newtonsoft.Json 12.0.3                                           MIT                  Ok
+- NuGet.Protocol 5.4.0                                      Apache-2.0                  Ok
+ - NuGet.Packaging 5.4.0                                    Apache-2.0                  Ok
+   - NuGet.Configuration 5.4.0                               Apache-2.0                  Ok
+     - NuGet.Common 5.4.0                                     Apache-2.0                  Ok
+       - NuGet.Frameworks 5.4.0                                Apache-2.0                  Ok
+   - NuGet.Versioning 5.4.0                                  Apache-2.0                  Ok
+   - Newtonsoft.Json 9.0.1                                          MIT                  Ok
+- Roslynator.Analyzers 2.2.0                                Apache-2.0                  Ok
+- Roslynator.CSharp 1.0.0                                   Apache-2.0                  Ok
+ - Roslynator.Core 1.0.0                                    Apache-2.0                  Ok
+- SemanticVersion 2.1.0                                            MIT                  Ok
+- Serilog 2.9.0                                             Apache-2.0                  Ok
+```
 
 ## Getting started
 
