@@ -4,22 +4,28 @@
 
 A package policy is specified on the following format:
 
+```javascript
 {
   // Required. Can end with a *
   "Package": "<Package Identifier>",
 
-  // Optional (default: null). Use to short-circuit the license detection.
+  // Optional (default: null). Use to short-circuit the license
+  // detection.
   "License": "<SPDX License Identifier>", 
 
-  // Optional (default: false). Use to short-circuit the license evaluation (no detection is done).
+  // Optional (default: false). Use to short-circuit the license
+  // evaluation (no detection is done).
   "AllowLicense": <true|false>,
 
-  // Optional (default: false). Set if the package should be ignored completely. Use for example for system packages.
+  // Optional (default: false). Set if the package should be ignored
+  // completely. Use for example for system packages.
   "Ignore": <true|false>,
 
-  // Optional (default: null). If there are internal packages, setting the location will recursively also crawl that location for dependencies.
+  // Optional (default: null). If there are internal packages, setting the
+  // location will recursively also crawl that location for dependencies.
   "Location": "<Path to source>"
 }
+```
 
 Different policies for different versions of the same package are not supported. 
 
@@ -29,14 +35,18 @@ See [packagePolicies.json](src/Main/packagePolicies.json)
 
 A license policy is specified on the following format:
 
+```javascript
 {
-    "License": "<SPDX License Identifier>|unknown|not evaluated",
+    "License": "<SPDX License Identifier>|<unknown>|<not evaluated>|<internal>",
     "Allow": <true|false>
 }
+```
 
-'<unknown>' is a special token given to packages where the license cannot be determined. 
-'<not evaluated>' is a special token given to packages where we have not even tried to determine the license.
-'<internal>' is a special token given to packages where Location is given in the package policy.
+`<unknown>` is a special token given to packages where the license cannot be determined.
+
+`<not evaluated>` is a special token given to packages where we have not even tried to determine the license.
+
+`<internal>` is a special token given to packages where Location is given in the package policy.
 
 See [licensePolicies.json](src/Main/licensePolicies.json)
 
