@@ -65,7 +65,7 @@ namespace LicenseInspector.DotNet.Tests {
                 new PackageRange("MyCompany.Level0", "[1.0]")
             };
 
-            var dependencies = await scanner.FindPackageDependencies(topLevelPackages);
+            var dependencies = await scanner.FindPackageDependencies(topLevelPackages, new string[] { });
 
             Assert.Single(dependencies);
             Assert.True(PackagesEqual(root, dependencies[0].Package));
