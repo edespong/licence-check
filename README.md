@@ -1,6 +1,6 @@
 # License Inspector
 
-License Inspector finds all dependencies for .NET solutions, detects their
+License Inspector finds all dependencies for .NET solutions or JavaScript projects, detects their
 licenses and generates a report with violations based on rules given by the
 user.
 
@@ -83,7 +83,7 @@ Human readable:
 
 ## Getting started
 
-The applcation needs at least .NET Core 3.1 SDK, see [.NET SDKs for Visual Studio](https://dotnet.microsoft.com/download/visual-studio-sdks)
+The application needs at least .NET Core 3.1 SDK, see [.NET SDKs for Visual Studio](https://dotnet.microsoft.com/download/visual-studio-sdks)
 
 
 The shipped config and license policies will likely not suite you, but when you
@@ -95,12 +95,12 @@ needs.
 
 > cd license-inspector
 
-> dotnet run --project src/Main/LicenseInspector.Main.csproj -- -r . -c src/Main/config.json -p
+> dotnet run --project src/Main/LicenseInspector.Main.csproj -- -r . -c src/Main/config.json -t dotnet -p
 
 This will run the application on the source code for the application.
 
-Note that the first run will download a lot of items from nuget.org which will
-take a significant amount of time. If you want to reduce the time for this, you
+Note that if you are targeting .NET, the first run will download a lot of items from nuget.org which will
+take a significant amount of time (around 9500 files). If you want to reduce the time for this, you
 can run the following script.
 
 ### Windows
