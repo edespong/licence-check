@@ -2,6 +2,8 @@
 
 ## Package policies
 
+The package policy argument can be a comma-separated list of one or more files.
+
 A package policy is specified on the following format:
 
 ```javascript
@@ -29,7 +31,8 @@ A package policy is specified on the following format:
 
 Different policies for different versions of the same package are not supported. 
 
-See [packagePolicies.json](src/Main/packagePolicies.json)
+See [publicPackagePolicies.json](src/Main/publicPackagePolicies.json) for an
+example.
 
 ## License policies
 

@@ -115,7 +115,7 @@ can run the following script.
 ## License detection
 
 For NuGet packages, licenses are detected in roughly the following way:
-* If the package has a license set manually by [config](src/Main/packagePolicies.json), use it
+* If the package has a license set manually by [config](src/Main/publicPackagePolicies.json), use it
 * If the package metadata contains a valid SPDX license, use it
 * If the package metadata points to a known license URL, which can be set by [config](src/Main/licenses.json), use that license
 * Download the file pointed to by the package license URL and run license-detector on it. If the confidence is high enough, use the license from the output

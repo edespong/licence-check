@@ -37,10 +37,12 @@ namespace LicenseInspector
                 .Location;
         }
 
-        public static PackagePolicies LoadFrom(string path)
+        public static PackagePolicies LoadFrom(string pathsStr)
         {
-            string str = File.ReadAllText(path);
-            ICollection<PackagePolicy> policies = JsonConvert.DeserializeObject<List<PackagePolicy>>(str)
+            var policies = pathsStr
+                .Split(",", System.StringSplitOptions.RemoveEmptyEntries)
+                .Select(p => File.ReadAllText(p.Trim()))
+                .SelectMany(str => JsonConvert.DeserializeObject<List<PackagePolicy>>(str))
                 .Where(p => p != null)
                 .ToList();
             return new PackagePolicies(policies);

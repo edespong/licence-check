@@ -171,14 +171,19 @@ namespace LicenseInspector
                 success = false;
             }
 
-            success = success && OkOrDefaultPathConfig(() => config.PackagePolicies, p => config.PackagePolicies = p, nameof(config.PackagePolicies), "packagePolicies.json");
-            success = success && OkOrDefaultPathConfig(() => config.LicensePolicies, p => config.LicensePolicies = p, nameof(config.LicensePolicies), "licensePolicies.json");
-            success = success && OkOrDefaultPathConfig(() => config.LicenseInfo, p => config.LicenseInfo = p, nameof(config.LicenseInfo), "licenses.json");
+            success = success && OkOrDefaultPathConfig(() => config.PackagePolicies.Split(","), nameof(config.PackagePolicies), "publicPackagePolicies.json, internalPackagePolicies.json");
+            success = success && OkOrDefaultPathConfig(() => config.LicensePolicies, nameof(config.LicensePolicies), "licensePolicies.json");
+            success = success && OkOrDefaultPathConfig(() => config.LicenseInfo, nameof(config.LicenseInfo), "licenses.json");
 
             return success;
         }
 
-        private static bool OkOrDefaultPathConfig(Func<string> getPath, Action<string> setPath, string configName, string defaultFilename)
+        private static bool OkOrDefaultPathConfig(Func<string[]> getPaths, string configName, string defaultFilename)
+        {
+            return getPaths().All(path => OkOrDefaultPathConfig(() => path.Trim(), configName, defaultFilename));
+        }
+
+        private static bool OkOrDefaultPathConfig(Func<string> getPath, string configName, string defaultFilename)
         {
             if (string.IsNullOrEmpty(getPath()))
             {
@@ -194,7 +199,12 @@ namespace LicenseInspector
                     return false;
                 }
 
-                setPath(Path.Combine(executingDir, defaultFilename));
+                var paths = defaultFilename
+                    .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                    .Select(p => Path.Combine(executingDir, p.Trim()))
+                    .ToArray();
+
+                return OkOrDefaultPathConfig(() => paths, configName, defaultFilename);
             }
 
             if (!File.Exists(getPath()))

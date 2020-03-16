@@ -7,6 +7,8 @@ namespace LicenseInspector
     /// </summary>
     public class Config
     {
+        /// <summary>Path to package policy file(s)</summary>
+        /// <remarks>Can contain a comma-separated list of files.</remarks>
         public string PackagePolicies { get; set; } = string.Empty;
         public string LicensePolicies { get; set; } = string.Empty;
         public string LicenseInfo { get; set; } = string.Empty;
