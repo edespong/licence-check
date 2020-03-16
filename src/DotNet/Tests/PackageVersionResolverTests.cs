@@ -2,7 +2,7 @@
 using System.Linq;
 using Xunit;
 
-namespace LicenseInspector.Tests
+namespace LicenseInspector.DotNet.Tests
 {
     public class PackageVersionResolverTests
     {

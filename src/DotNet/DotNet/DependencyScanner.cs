@@ -90,7 +90,6 @@ namespace LicenseInspector.DotNet
                 }
             }
 
-
             return result;
         }
 
