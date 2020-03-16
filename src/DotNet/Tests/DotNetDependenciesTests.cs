@@ -85,6 +85,7 @@ namespace LicenseInspector.DotNet.Tests
                 LicensePolicies = licensePoliciesPath,
                 LicenseInfo = null,
                 IgnoreDuplicatePackages = true,
+                FollowLocations = false,
                 MinimumLicenseConfidenceThreshold = 1.0,
                 DiskCache = new DiskCacheConfig
                 {

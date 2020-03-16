@@ -14,6 +14,7 @@ namespace LicenseInspector
         public string LicenseInfo { get; set; } = string.Empty;
         public double MinimumLicenseConfidenceThreshold { get; set; }
         public bool IgnoreDuplicatePackages { get; set; }
+        public bool FollowLocations { get; set; } = true;
         public DiskCacheConfig DiskCache { get; set; } = new DiskCacheConfig();
 
         public static Config WithoutCache(Config config)
@@ -25,6 +26,7 @@ namespace LicenseInspector
                 LicenseInfo = config.LicenseInfo,
                 MinimumLicenseConfidenceThreshold = config.MinimumLicenseConfidenceThreshold,
                 IgnoreDuplicatePackages = config.IgnoreDuplicatePackages,
+                FollowLocations = config.FollowLocations,
                 DiskCache = new DiskCacheConfig
                 {
                     CacheRoot = config.DiskCache.CacheRoot,

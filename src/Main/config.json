@@ -7,6 +7,8 @@
 
   "IgnoreDuplicatePackages": true,
 
+  "FollowLocations": true,
+
   "DiskCache": {
     "CacheRoot": "c:\\temp\\license-inspector",
     "ResolvedDependencies": {

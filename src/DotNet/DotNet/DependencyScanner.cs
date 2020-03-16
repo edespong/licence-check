@@ -13,6 +13,7 @@ namespace LicenseInspector.DotNet
         private readonly NuGetDependencies registry;
         private readonly IFileAccess fileSystem;
         private readonly PackagePolicies packagePolicies;
+        private readonly bool followLocations;
 
         public async static Task<DependencyScanner> Create(Config config, IFileAccess fileSystem, PackagePolicies packagePolicies)
         {
@@ -27,6 +28,7 @@ namespace LicenseInspector.DotNet
             this.registry = new NuGetDependencies(index, config);
             this.fileSystem = fileSystem;
             this.packagePolicies = packagePolicies;
+            this.followLocations = config.FollowLocations;
         }
 
         public Task<IList<DependencyChain<AnalyzedPackage>>> FindPackageDependencies(string root)
@@ -94,10 +96,20 @@ namespace LicenseInspector.DotNet
                     {
                         continue;
                     }
-                    searchedRoots.Add(location);
-                    var analyzedPacage = new AnalyzedPackage(package);
-                    var dependencies = await this.FindPackageDependenciesAux(location!, searchedRoots);
-                    var chain = new DependencyChain<AnalyzedPackage>(analyzedPacage, dependencies);
+
+                    var analyzedPackage = new AnalyzedPackage(package);
+                    IList<DependencyChain<AnalyzedPackage>> dependencies;
+                    if (this.followLocations)
+                    {
+                        searchedRoots.Add(location);
+                        dependencies = await this.FindPackageDependenciesAux(location!, searchedRoots);
+                    }
+                    else
+                    {
+                        dependencies = DependencyChain<AnalyzedPackage>.EmptyList;
+                    }
+
+                    var chain = new DependencyChain<AnalyzedPackage>(analyzedPackage, dependencies);
                     result.Add(chain);
                 }
             }

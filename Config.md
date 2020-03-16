@@ -68,19 +68,25 @@ See [licenses.json](src/Main/licenses.json)
 See [config.json](src/Main/config.json) for the default config. If no paths have
 been set for the package or license policies, the default paths are used.
 
-# Minimum licenseConfidence threshold
+### Minimum license confidence threshold
 
 When trying to determine the license from a text, license-detector will give a
 confidence level on the license returned. If the confidence level is above this
 threshold the license will be accepted.
 
-# Ignore duplicate packages
+### Ignore duplicate packages
 
 Many of your packages will have sub-dependencies that are the same. This setting
 determines if a package should only be evaluated once (and show up once in the
 output). If you want a full tree of all dependencies, this should be set to false.
 
-# Disk cache configuration
+### Follow locations
+
+You can give a location where to find an internal package in the package policy
+file. This automatically marks it as internal. If you do not want to recurively
+look for other dependencies in that location, set this config to false.
+
+### Disk cache configuration
 
 The application caches a lot of the intermediary results to speed up subsequent
 runs. The CacheRoot path should be changed to where you want the cached data to

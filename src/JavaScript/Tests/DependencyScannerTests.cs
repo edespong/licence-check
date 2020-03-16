@@ -87,6 +87,7 @@ namespace LicenseInspector.JavaScript.Tests
                 LicensePolicies = null,
                 LicenseInfo = null,
                 IgnoreDuplicatePackages = true,
+                FollowLocations = false,
                 MinimumLicenseConfidenceThreshold = 1.0,
                 DiskCache = new DiskCacheConfig
                 {
