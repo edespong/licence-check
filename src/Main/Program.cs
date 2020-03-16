@@ -175,6 +175,16 @@ namespace LicenseInspector
             success = success && OkOrDefaultPathConfig(() => config.LicensePolicies, nameof(config.LicensePolicies), "licensePolicies.json");
             success = success && OkOrDefaultPathConfig(() => config.LicenseInfo, nameof(config.LicenseInfo), "licenses.json");
 
+            if (success)
+            {
+                SetIfEmpty(config.LicensePolicies, () => config.LicensePolicies = "licensePolicies.json");
+                SetIfEmpty(config.LicenseInfo, () => config.LicenseInfo = "licenses.json");
+                foreach (var p in config.PackagePolicies.Split(","))
+                {
+                    SetIfEmpty(config.PackagePolicies, () => config.PackagePolicies = "publicPackagePolicies.json, internalPackagePolicies.json");
+                }
+            }
+
             return success;
         }
 
@@ -204,7 +214,7 @@ namespace LicenseInspector
                     .Select(p => Path.Combine(executingDir, p.Trim()))
                     .ToArray();
 
-                return OkOrDefaultPathConfig(() => paths, configName, defaultFilename);
+                return OkOrDefaultPathConfig(() => paths, configName, string.Empty);
             }
 
             if (!File.Exists(getPath()))
@@ -214,6 +224,16 @@ namespace LicenseInspector
             }
 
             return true;
+        }
+
+        private static void SetIfEmpty(string path, Action setPath)
+        {
+            if (!string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            setPath();
         }
 
         private class Scanner
