@@ -29,7 +29,14 @@ namespace LicenseInspector.DotNet
             this.packagePolicies = packagePolicies;
         }
 
-        public async Task<IList<DependencyChain<AnalyzedPackage>>> FindPackageDependencies(string root)
+        public Task<IList<DependencyChain<AnalyzedPackage>>> FindPackageDependencies(string root)
+        {
+            // Needed so that we do not follow internal dependencies in a cyclic manner.
+            var searchedRoots = new List<string> { root };
+            return FindPackageDependenciesAux(root, searchedRoots);
+        }
+
+        private async Task<IList<DependencyChain<AnalyzedPackage>>> FindPackageDependenciesAux(string root, ICollection<string> searchedRoots)
         {
             var topLevelDependencies = GetTopLevelDependencies(root);
 
@@ -47,13 +54,13 @@ namespace LicenseInspector.DotNet
             }
 
             // The real work is done here.
-            var dependencies = await FindPackageDependencies(topLevelDependencies.Where(d => !d.VersionRange.Contains("$")));
+            var dependencies = await FindPackageDependencies(topLevelDependencies.Where(d => !d.VersionRange.Contains("$")), searchedRoots);
             result.AddRange(dependencies);
 
             return result;
         }
 
-        internal async Task<IList<DependencyChain<AnalyzedPackage>>> FindPackageDependencies(IEnumerable<PackageRange> packages)
+        internal async Task<IList<DependencyChain<AnalyzedPackage>>> FindPackageDependencies(IEnumerable<PackageRange> packages, ICollection<string> searchedRoots)
         {
             var packagesToResolved = packages
                 .Select(p => (Package: p, Resolved: this.versionResolver.GetSingleVersion(p)))
@@ -83,10 +90,15 @@ namespace LicenseInspector.DotNet
             {
                 foreach (var (package, location) in packagesWithLocations)
                 {
-                    var x = new AnalyzedPackage(package);
-                    var dependencies = await this.FindPackageDependencies(location!);
-                    var y = new DependencyChain<AnalyzedPackage>(x, dependencies);
-                    result.Add(y);
+                    if (searchedRoots.Contains(location))
+                    {
+                        continue;
+                    }
+                    searchedRoots.Add(location);
+                    var analyzedPacage = new AnalyzedPackage(package);
+                    var dependencies = await this.FindPackageDependenciesAux(location!, searchedRoots);
+                    var chain = new DependencyChain<AnalyzedPackage>(analyzedPacage, dependencies);
+                    result.Add(chain);
                 }
             }
 
