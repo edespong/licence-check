@@ -110,6 +110,7 @@ namespace LicenseInspector
             return platform switch
             {
                 "dotnet" => await DotNet.DotNet.Create(fileAccess, config),
+                "js" => await JavaScript.JavaScript.Create(fileAccess, config),
                 _ => throw new ArgumentException($"Invalid platform: {platform}")
             };
         }

@@ -12,7 +12,7 @@
     "Ignore": true
   },
   {
-    "Package": "xunit*",
-    "License": "Apache-2.0"
+    "Package": "@*",
+    "Ignore": true
   }
 ]

@@ -93,7 +93,7 @@ namespace LicenseInspector
             string deprecated = "https://aka.ms/deprecateLicenseUrl";
             if (packageDetails.LicenseUrl == null || packageDetails.LicenseUrl.ToString() == deprecated)
             {
-                Log.Information($"{package} has no valid license URL");
+                Log.Information($"{package} has no valid license URL (will try to fetch from repository)");
                 return await GetLicenseFromProject(package, packageDetails.PackageUrl);
             }
 

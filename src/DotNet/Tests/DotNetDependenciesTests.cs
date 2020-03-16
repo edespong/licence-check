@@ -4,7 +4,8 @@ using System.IO;
 using System.Linq;
 using Xunit;
 
-namespace LicenseInspector.DotNet.Tests {
+namespace LicenseInspector.DotNet.Tests
+{
     public class DotNetDependenciesTest : IDisposable
     {
         private string packagePoliciesPath;

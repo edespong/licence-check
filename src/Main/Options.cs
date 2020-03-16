@@ -4,7 +4,7 @@ namespace LicenseInspector
 {
     public class Options
     {
-        [Option('t', "platform", Required = false, Default = "dotnet", HelpText = "Type of code projects to scan. Supported values: dotnet")]
+        [Option('t', "platform", Required = false, Default = "dotnet", HelpText = "Type of code projects to scan. Supported values: dotnet, js")]
         public string Platform { get; set; } = string.Empty;
 
         [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
