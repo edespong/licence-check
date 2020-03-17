@@ -22,7 +22,7 @@ namespace LicenseInspector
 
         public virtual bool IsMatch(string licenseId)
         {
-            return License.Equals(licenseId);
+            return License.Equals(licenseId, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 
@@ -41,7 +41,7 @@ namespace LicenseInspector
 
         public override bool IsMatch(string licenseId)
         {
-            return licenseId.StartsWith(License);
+            return licenseId.StartsWith(License, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
