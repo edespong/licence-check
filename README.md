@@ -112,7 +112,7 @@ can run the following script.
 
 > Remove-Item c:\temp\licence-inspector\nugetPagesCache.zip
 
-## License detection
+# License detection
 
 For NuGet packages, licenses are detected in roughly the following way:
 * If the package has a license set manually by [config](src/Main/publicPackagePolicies.json), use it
@@ -130,3 +130,10 @@ If you are running the application in such a way that the environment is
 continously set up and torn down, you should set a stable cache path such
 as a network share or similar.
 
+# Known issues
+
+* Dependencies way vary depending on target platform. This is ignored.
+
+* Recursive dependency lookup for internal packages are based on location rather
+than project. This means that if an internal dependency is part of a larger
+codebase, all dependencies of that codebase are discovered.
