@@ -53,14 +53,14 @@ namespace LicenseInspector
 
         private async Task<LicensedPackage> GetLicenseAsync(AnalyzedPackage package)
         {
-            if (package.State == AnalysisState.Error)
-            {
-                return package.Attach(License.NonEvaluated);
-            }
-
             if (this.licenseProvider.TryGetLicense(package.Id, out string explicitLicense))
             {
                 return package.With(AnalysisState.Ok, "Given by config.").Attach(new License(explicitLicense));
+            }
+
+            if (package.State == AnalysisState.Error)
+            {
+                return package.Attach(License.NonEvaluated);
             }
 
             string path = string.Format(this.licensePathFormatStr, package.Id, package.Version);

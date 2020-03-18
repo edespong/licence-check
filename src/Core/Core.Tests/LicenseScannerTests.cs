@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace LicenseInspector.Core.Tests
@@ -7,39 +7,20 @@ namespace LicenseInspector.Core.Tests
     public class LicenseScannerTests
     {
         [Fact]
-        public void GetLicenseUrl_GitProtocol_CorrectUrl()
+        public void x()
         {
-            TestGetLicenseUrl("git://github.com/zertosh/x-x.git",
-                "https://raw.githubusercontent.com/zertosh/x-x/master/LICENSE");
-        }
+            var config = new Config();
+            var packagePolicies = new PackagePolicies(new[] { new PackagePolicy { Package = "test-id", License = "test-license" } });
+            var scanner = new LicenseScanner(p => Task.FromResult(new PackageDetailsResult(PackageDetailsResultEnum.NoPackageFound)), packagePolicies, config);
 
-        [Fact]
-        public void GetLicenseUrl_GitPlus_CorrectUrl()
-        {
-            TestGetLicenseUrl("git+https://github.com/x/fbjs.git",
-                "https://raw.githubusercontent.com/x/fbjs/master/LICENSE");
-        }
+            var package = new AnalyzedPackage("test-id", "1.0.4", AnalysisState.Error, "test error");
+            var dependencies = DependencyChain<AnalyzedPackage>.EmptyList;
+            var packages = new[] { new DependencyChain<AnalyzedPackage>(package, dependencies) };
 
-        [Fact]
-        public void GetLicenseUrl_HttpsProtocol_CorrectUrl()
-        {
-            TestGetLicenseUrl("https://github.com/x/promise.git",
-                "https://raw.githubusercontent.com/x/promise/master/LICENSE");
-        }
+            var result = scanner.FindLicenses(packages);
 
-        [Fact]
-        public void GetLicenseUrl_WithDot_CorrectUrl()
-        {
-            TestGetLicenseUrl("git://github.com/x/spin.js.git",
-                "https://raw.githubusercontent.com/x/spin.js/master/LICENSE");
-        }
-
-        private void TestGetLicenseUrl(string url, string expectedResult)
-        {
-            var projectUrl = new Uri(url);
-            var expected = new Uri(expectedResult);
-            var result = LicenseScanner.GetPotentialLicenseUrls(projectUrl).First();
-            Assert.Equal(expected, result);
+            Assert.Equal(1, result.Count);
+            Assert.Equal("test-license", result.First().Package.License);
         }
     }
 }
