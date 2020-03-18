@@ -4,7 +4,6 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 
@@ -80,7 +79,7 @@ namespace LicenseInspector
 
             Log.Debug($"Done with {platform} dependencies");
 
-            string output = GetOutput(evaluatedPackages, options.PrettyPrint);
+            string output = Output.Generate(evaluatedPackages, options.PrettyPrint);
 
             if (!string.IsNullOrWhiteSpace(options.Output))
             {
@@ -113,22 +112,6 @@ namespace LicenseInspector
                 "js" => await JavaScript.JavaScript.Create(fileAccess, config),
                 _ => throw new ArgumentException($"Invalid platform: {platform}")
             };
-        }
-
-        private static string GetOutput(IList<DependencyChain<EvaluatedPackage>> packages, bool prettyPrint)
-        {
-            if (!prettyPrint)
-            {
-                return JsonConvert.SerializeObject(packages, Formatting.Indented);
-            }
-
-            StringBuilder sb = new StringBuilder();
-            foreach (var d in packages.OrderBy(p => p.Package.Id))
-            {
-                sb.Append(DependencyChainPrinter.Print(d));
-            }
-
-            return sb.ToString();
         }
 
         private static void InitializeLogging(string path, bool quiet, bool verbose)
