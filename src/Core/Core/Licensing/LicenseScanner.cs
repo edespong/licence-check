@@ -66,7 +66,7 @@ namespace LicenseInspector
             string path = string.Format(this.licensePathFormatStr, package.Id, package.Version);
             if (DiskCache.TryGetValue(path, this.config.DiskCache.ResolvedLicenses, out ResolvedLicense? cachedLicense))
             {
-                return new LicensedPackage(package.Id, package.Version, cachedLicense.License, cachedLicense.State, cachedLicense.Messages);
+                return new LicensedPackage(package.Id, package.Version, package.OriginProject, cachedLicense.License, cachedLicense.State, cachedLicense.Messages);
             }
 
             var details = await this.getDetails(package);
@@ -87,7 +87,7 @@ namespace LicenseInspector
             var packageDetails = details.Package!;
             if (packageDetails.License != null)
             {
-                return new LicensedPackage(package.Id, package.Version, packageDetails.License);
+                return new LicensedPackage(package.Id, package.Version, package.OriginProject, packageDetails.License);
             }
 
             string deprecated = "https://aka.ms/deprecateLicenseUrl";

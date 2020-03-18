@@ -38,11 +38,14 @@ namespace LicenseInspector
         [JsonIgnore]
         public string VersionRange => "[" + Version + "]";
 
-        public AnalyzedPackage(string id, string version)
+        public string OriginProject { get; }
+
+        public AnalyzedPackage(string id, string version, string originProject)
         {
             Id = id;
             Version = version;
             State = AnalysisState.Ok;
+            OriginProject = originProject;
         }
 
         public AnalyzedPackage(Package package)
@@ -50,21 +53,24 @@ namespace LicenseInspector
             Id = package.Id;
             Version = package.Version;
             State = AnalysisState.Ok;
+            OriginProject = package.OriginProject;
         }
 
-        public AnalyzedPackage(string id, string version, AnalysisState state, string message)
+        public AnalyzedPackage(string id, string version, string originProject, AnalysisState state, string message)
         {
             Id = id;
             Version = version;
+            OriginProject = originProject;
             State = state;
             Messages.Add(message);
         }
 
         [JsonConstructor]
-        public AnalyzedPackage(string id, string version, AnalysisState state, IList<string> messages)
+        public AnalyzedPackage(string id, string version, string originProject, AnalysisState state, IList<string> messages)
         {
             Id = id;
             Version = version;
+            OriginProject = originProject;
             State = state;
             Messages = messages;
         }
@@ -74,15 +80,15 @@ namespace LicenseInspector
         /// </summary>
         public AnalyzedPackage With(AnalysisState state, string message)
         {
-            return new AnalyzedPackage(Id, Version, state, message);
+            return new AnalyzedPackage(Id, Version, OriginProject, state, message);
         }
 
         /// <summary>
-        /// Attached a license the the package, returning the result.
+        /// Attached a license the package, returning the result.
         /// </summary>
         public LicensedPackage Attach(License license)
         {
-            return new LicensedPackage(Id, Version, license.Id, State, Messages);
+            return new LicensedPackage(Id, Version, OriginProject, license.Id, State, Messages);
         }
 
         public override string ToString()
@@ -101,18 +107,18 @@ namespace LicenseInspector
         [JsonProperty(Order = 2)]
         public string License { get; }
 
-        public LicensedPackage(string packageId, string version, string license) : base(packageId, version)
+        public LicensedPackage(string packageId, string version, string originProject, string license) : base(packageId, version, originProject)
         {
             License = license;
         }
 
-        public LicensedPackage(string packageId, string version, string license, AnalysisState state, IList<string> messages)
-            : base(packageId, version, state, messages)
+        public LicensedPackage(string packageId, string version, string originProject, string license, AnalysisState state, IList<string> messages)
+            : base(packageId, version, originProject, state, messages)
         {
             License = license;
         }
 
-        public LicensedPackage(LicensedPackage other) : base(other.Id, other.Version)
+        public LicensedPackage(LicensedPackage other) : base(other.Id, other.Version, other.OriginProject)
         {
             License = other.License;
         }
@@ -136,7 +142,7 @@ namespace LicenseInspector
         [JsonProperty(Order = 4)]
         public string Remark { get; }
 
-        public EvaluatedPackage(string packageId, string version, string license, Evaluation result, string remark = "") : base(packageId, version, license)
+        public EvaluatedPackage(string packageId, string version, string originProject, string license, Evaluation result, string remark = "") : base(packageId, originProject, version, license)
         {
             Result = result;
             Remark = remark;

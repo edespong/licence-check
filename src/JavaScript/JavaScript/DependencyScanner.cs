@@ -48,7 +48,7 @@ namespace LicenseInspector.JavaScript
         {
             string text = this.fileSystem.ReadAllText(path);
             var packageJson = JsonConvert.DeserializeObject<PackageJson>(text);
-            return packageJson.Dependencies.Select(x => new PackageRange(x.Key, x.Value));
+            return packageJson.Dependencies.Select(x => new PackageRange(x.Key, x.Value, path));
         }
 
         internal async Task<IList<DependencyChain<AnalyzedPackage>>> FindPackageDependencies(IEnumerable<PackageRange> packages)
@@ -106,7 +106,7 @@ namespace LicenseInspector.JavaScript
             var analyzedPackage = new AnalyzedPackage(package);
 
             var packageDependencies = npmPackage.Dependencies ?? new Dictionary<string, string>();
-            var dependencies = await FindPackageDependencies(packageDependencies.Select(x => new PackageRange(x.Key, x.Value)));
+            var dependencies = await FindPackageDependencies(packageDependencies.Select(x => new PackageRange(x.Key, x.Value, package.OriginProject)));
 
             var result = new DependencyChain<AnalyzedPackage>(analyzedPackage, dependencies);
             CacheDependencies(package, result);

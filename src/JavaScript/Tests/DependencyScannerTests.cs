@@ -15,7 +15,7 @@ namespace LicenseInspector.JavaScript.Tests
             var packagePolicies = new PackagePolicies(new PackagePolicy[] { });
 
             var scanner = new DependencyScanner(new FakeNpm(), new FakeFileSystem(), packagePolicies, config.DiskCache);
-            var x = scanner.FindPackageDependencies(new[] { new PackageRange("test-package", "^1.0.0") }).Result;
+            var x = scanner.FindPackageDependencies(new[] { new PackageRange("test-package", "^1.0.0", "") }).Result;
 
             Assert.Equal(1, x[0].Dependencies.Count);
         }

@@ -15,7 +15,7 @@ namespace LicenseInspector.Core.Tests
             var packagePolicies = new PackagePolicies(new PackagePolicy[] { });
             var policies = new LicensePolicies(new[] { policy }, packagePolicies);
 
-            var package = new LicensedPackage("test-id", "1.0.0", "Ms-PL");
+            var package = new LicensedPackage("test-id", "1.0.0", "Ms-PL", string.Empty);
        
             var result = policies.Apply(package);
 

@@ -13,7 +13,7 @@ namespace LicenseInspector.Core.Tests
             var packagePolicies = new PackagePolicies(new[] { new PackagePolicy { Package = "test-id", License = "test-license" } });
             var scanner = new LicenseScanner(p => Task.FromResult(new PackageDetailsResult(PackageDetailsResultEnum.NoPackageFound)), packagePolicies, config);
 
-            var package = new AnalyzedPackage("test-id", "1.0.4", AnalysisState.Error, "test error");
+            var package = new AnalyzedPackage("test-id", "1.0.4", string.Empty, AnalysisState.Error, "test error");
             var dependencies = DependencyChain<AnalyzedPackage>.EmptyList;
             var packages = new[] { new DependencyChain<AnalyzedPackage>(package, dependencies) };
 

@@ -21,12 +21,12 @@ namespace LicenseInspector
     public class InvalidDependencyChain : DependencyChain<AnalyzedPackage>
     {
         public InvalidDependencyChain(Package package, string message)
-            : base(new AnalyzedPackage(package.Id, package.Version, AnalysisState.Error, message), EmptyList)
+            : base(new AnalyzedPackage(package.Id, package.Version, package.OriginProject, AnalysisState.Error, message), EmptyList)
         {
         }
 
         public InvalidDependencyChain(IPackageRange package, string message)
-            : base(new AnalyzedPackage(package.Id, package.VersionRange, AnalysisState.Error, message), EmptyList)
+            : base(new AnalyzedPackage(package.Id, package.VersionRange, package.OriginProject, AnalysisState.Error, message), EmptyList)
         {
         }
     }
