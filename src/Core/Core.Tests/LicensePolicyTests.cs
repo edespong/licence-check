@@ -15,12 +15,11 @@ namespace LicenseInspector.Core.Tests
             var packagePolicies = new PackagePolicies(new PackagePolicy[] { });
             var policies = new LicensePolicies(new[] { policy }, packagePolicies);
 
-            var package = new LicensedPackage("test-id", "1.0.0", "Ms-PL", string.Empty);
-       
+            var package = new LicensedPackage("test-id", "1.0.0", string.Empty, "Ms-PL");
+
             var result = policies.Apply(package);
 
             Assert.Equal(Evaluation.Ok, result.Result);
         }
-
     }
 }
