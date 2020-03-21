@@ -36,27 +36,27 @@ namespace LicenseInspector
             if (!range.Contains(",") && range.StartsWith("[") && range.EndsWith("]"))
             {
                 int length = range.Length - 2;
-                return new Package(package.Id, range.Substring(1, length).Trim());
+                return new Package(package.Id, range.Substring(1, length).Trim(), package.OriginProject);
             }
 
             // Minimum version, inclusive: "x.y.z"
             if (!range.Contains(","))
             {
-                return new Package(package.Id, range.Trim());
+                return new Package(package.Id, range.Trim(), package.OriginProject);
             }
 
             // Inclusive minimal version: "[x.y.z, ..."
             if (range.StartsWith("["))
             {
                 int length = range.IndexOf(",") - 1;
-                return new Package(package.Id, range.Substring(1, length).Trim());
+                return new Package(package.Id, range.Substring(1, length).Trim(), package.OriginProject);
             }
 
             // Inclusive maximal version: "..., x.y.z]"
             if (range.StartsWith("]"))
             {
                 int length = range.IndexOf(",") - 1;
-                return new Package(package.Id, range.Substring(1, length).Trim());
+                return new Package(package.Id, range.Substring(1, length).Trim(), package.OriginProject);
             }
 
             // Exclusive range: "(x.y.z, a.b.c)", "(x.y.z,)", "(, x.y.z)"
@@ -72,7 +72,7 @@ namespace LicenseInspector
                     return null;
                 }
 
-                return new Package(package.Id, version.ToString());
+                return new Package(package.Id, version.ToString(), package.OriginProject);
             }
 
             Log.Error("Unhandled version format: " + package.VersionRange);

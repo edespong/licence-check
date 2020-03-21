@@ -21,30 +21,30 @@ namespace LicenseInspector.JavaScript
 
         public Task<Package?> GetSingleVersion(IPackageRange package)
         {
-            return GetSingleVersion(package.Id, package.VersionRange);
+            return GetSingleVersion(package.Id, package.VersionRange, package.OriginProject);
         }
 
-        private async Task<Package?> GetSingleVersion(string id, string versionRange)
+        private async Task<Package?> GetSingleVersion(string id, string versionRange, string originProject)
         {
             versionRange = versionRange.Trim();
             if (versionRange.Contains("||"))
             {
                 int i = versionRange.IndexOf("||");
-                return await GetSingleVersion(id, versionRange[(i + 2)..^0]);
+                return await GetSingleVersion(id, versionRange[(i + 2)..^0], originProject);
             }
 
             if (versionRange.StartsWith("^"))
             {
                 string? version1 = await GetFullVersion(id, versionRange.Substring(1));
                 if (version1 == null) { return null; }
-                return new Package(id, version1);
+                return new Package(id, version1, originProject);
             }
 
             if (versionRange.StartsWith("~"))
             {
                 string? version2 = await GetFullVersion(id, versionRange.Substring(1));
                 if (version2 == null) { return null; }
-                return new Package(id, version2);
+                return new Package(id, version2, originProject);
             }
 
             if (versionRange.StartsWith(">="))
@@ -60,7 +60,7 @@ namespace LicenseInspector.JavaScript
 
                 string? version3 = await GetFullVersion(id, result.Trim());
                 if (version3 == null) { return null; }
-                return new Package(id, version3);
+                return new Package(id, version3, originProject);
             }
 
             string? version = await GetFullVersion(id, versionRange);
@@ -69,7 +69,7 @@ namespace LicenseInspector.JavaScript
                 return null;
             }
 
-            return new Package(id, version);
+            return new Package(id, version, originProject);
         }
 
         private async Task<string?> GetFullVersion(string packageId, string version)

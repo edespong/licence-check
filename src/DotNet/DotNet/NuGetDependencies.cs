@@ -212,7 +212,7 @@ namespace LicenseInspector.DotNet
             var (status, packageDetails) = await GetPackageDetails(package);
             if (status == PackageDetailsResultEnum.InternalPackage)
             {
-                var analyzedPackage = new AnalyzedPackage(package.Id, package.Version, AnalysisState.Ok, string.Empty);
+                var analyzedPackage = new AnalyzedPackage(package.Id, package.Version, package.OriginProject, AnalysisState.Ok, string.Empty);
                 return new DependencyChain<AnalyzedPackage>(analyzedPackage, DependencyChain<AnalyzedPackage>.EmptyList);
             }
             else if (status != PackageDetailsResultEnum.Success)

@@ -12,6 +12,7 @@ namespace LicenseInspector
         public string PackagePolicies { get; set; } = string.Empty;
         public string LicensePolicies { get; set; } = string.Empty;
         public string LicenseInfo { get; set; } = string.Empty;
+        public string ProjectsInfo { get; set; } = string.Empty;
         public double MinimumLicenseConfidenceThreshold { get; set; }
         public bool IgnoreDuplicatePackages { get; set; }
         public bool FollowLocations { get; set; } = true;
@@ -24,6 +25,7 @@ namespace LicenseInspector
                 PackagePolicies = config.PackagePolicies,
                 LicensePolicies = config.LicensePolicies,
                 LicenseInfo = config.LicenseInfo,
+                ProjectsInfo = config.ProjectsInfo,
                 MinimumLicenseConfidenceThreshold = config.MinimumLicenseConfidenceThreshold,
                 IgnoreDuplicatePackages = config.IgnoreDuplicatePackages,
                 FollowLocations = config.FollowLocations,

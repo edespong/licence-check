@@ -17,7 +17,7 @@ namespace LicenseInspector.JavaScript.Tests
             const string version = "1.2.3";
             const string expected = "1.2.3";
 
-            var result = resolver.GetSingleVersion(new PackageRange("test", version)).Result;
+            var result = resolver.GetSingleVersion(new PackageRange("test", version, "")).Result;
 
             Assert.Equal(expected, result.Version);
         }
@@ -33,7 +33,7 @@ namespace LicenseInspector.JavaScript.Tests
             const string version = "1";
             const string expected = "1.9.1";
 
-            var result = resolver.GetSingleVersion(new PackageRange("test", version)).Result;
+            var result = resolver.GetSingleVersion(new PackageRange("test", version, "")).Result;
 
             Assert.Equal(expected, result.Version);
         }
@@ -45,7 +45,7 @@ namespace LicenseInspector.JavaScript.Tests
             const string version = "0.2.1 || ^1.9";
             const string expected = "1.9.1";
 
-            var result = resolver.GetSingleVersion(new PackageRange("test", version)).Result;
+            var result = resolver.GetSingleVersion(new PackageRange("test", version, "")).Result;
 
             Assert.Equal(expected, result.Version);
         }
@@ -57,7 +57,7 @@ namespace LicenseInspector.JavaScript.Tests
             const string version = "1.9";
             const string expected = "1.9.1";
 
-            var result = resolver.GetSingleVersion(new PackageRange("test", version)).Result;
+            var result = resolver.GetSingleVersion(new PackageRange("test", version, "")).Result;
 
             Assert.Equal(expected, result.Version);
         }
@@ -69,7 +69,7 @@ namespace LicenseInspector.JavaScript.Tests
             const string version = "1.0.0-preview2-final";
             const string expected = "1.0.0-preview2-final";
 
-            var result = resolver.GetSingleVersion(new PackageRange("test", version)).Result;
+            var result = resolver.GetSingleVersion(new PackageRange("test", version, "")).Result;
 
             Assert.Equal(expected, result.Version);
         }

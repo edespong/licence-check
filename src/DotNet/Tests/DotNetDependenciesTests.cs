@@ -63,7 +63,7 @@ namespace LicenseInspector.DotNet.Tests
             var scanner = new DependencyScanner(index, config, FileAccess.GetAccessor(), policies);
             var topLevelPackages = new[]
             {
-                new PackageRange("MyCompany.Level0", "[1.0]")
+                new PackageRange("MyCompany.Level0", "[1.0]", "")
             };
 
             var dependencies = await scanner.FindPackageDependencies(topLevelPackages, new string[] { });
@@ -84,6 +84,7 @@ namespace LicenseInspector.DotNet.Tests
                 PackagePolicies = packagePoliciesPath,
                 LicensePolicies = licensePoliciesPath,
                 LicenseInfo = null,
+                ProjectsInfo = null,
                 IgnoreDuplicatePackages = true,
                 FollowLocations = false,
                 MinimumLicenseConfidenceThreshold = 1.0,

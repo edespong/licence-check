@@ -40,7 +40,7 @@ namespace LicenseInspector
         }
 
         /// <summary>
-        /// Tries to find the license identifier based on the text in the 
+        /// Tries to find the license identifier based on the text in the
         /// license file.
         /// </summary>
         public async Task<(License?, string)> TryGetLicenseFromLicenseFile(Uri licenseUrl)

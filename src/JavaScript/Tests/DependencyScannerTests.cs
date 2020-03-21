@@ -15,7 +15,7 @@ namespace LicenseInspector.JavaScript.Tests
             var packagePolicies = new PackagePolicies(new PackagePolicy[] { });
 
             var scanner = new DependencyScanner(new FakeNpm(), new FakeFileSystem(), packagePolicies, config.DiskCache);
-            var x = scanner.FindPackageDependencies(new[] { new PackageRange("test-package", "^1.0.0") }).Result;
+            var x = scanner.FindPackageDependencies(new[] { new PackageRange("test-package", "^1.0.0", "") }).Result;
 
             Assert.Equal(1, x[0].Dependencies.Count);
         }
@@ -63,7 +63,7 @@ namespace LicenseInspector.JavaScript.Tests
                     {
                         Id = "test-package",
                         License = "BSD",
-                        Dependencies = new Dictionary<string, string> { },
+                        Dependencies = new Dictionary<string, string>(),
                         Version = "1.2.3"
                     };
                 }
@@ -86,6 +86,7 @@ namespace LicenseInspector.JavaScript.Tests
                 PackagePolicies = null,
                 LicensePolicies = null,
                 LicenseInfo = null,
+                ProjectsInfo = null,
                 IgnoreDuplicatePackages = true,
                 FollowLocations = false,
                 MinimumLicenseConfidenceThreshold = 1.0,

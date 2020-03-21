@@ -13,7 +13,7 @@ namespace LicenseInspector.DotNet.Tests
         public void ExactVersion_ResolvesCorrectVersion()
         {
             var resolver = new PackageVersionResolver(emptyProvider);
-            var result = resolver.GetSingleVersion(new PackageRange("t", "[1.0]")).Result;
+            var result = resolver.GetSingleVersion(new PackageRange("t", "[1.0]", "")).Result;
 
             Assert.Equal("1.0", result.Version);
         }
@@ -22,7 +22,7 @@ namespace LicenseInspector.DotNet.Tests
         public void ExactVersionStrangeFormatting_ResolvesCorrectVersion()
         {
             var resolver = new PackageVersionResolver(emptyProvider);
-            var result = resolver.GetSingleVersion(new PackageRange("t", "[ 1.0 ]")).Result;
+            var result = resolver.GetSingleVersion(new PackageRange("t", "[ 1.0 ]", "")).Result;
 
             Assert.Equal("1.0", result.Version);
         }
@@ -32,7 +32,7 @@ namespace LicenseInspector.DotNet.Tests
         {
             var provider = new MockVersionProvider(new[] { "1.0.0", "1.1.0", "2.0.0" });
             var resolver = new PackageVersionResolver(provider);
-            var result = resolver.GetSingleVersion(new PackageRange("t", "(1.0.0,2.0.0)")).Result;
+            var result = resolver.GetSingleVersion(new PackageRange("t", "(1.0.0,2.0.0)", "")).Result;
 
             Assert.True(result.Version == "1.1.0" || result.Version == "2.0.0");
         }

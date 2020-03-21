@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Linq;
@@ -33,6 +32,13 @@ namespace LicenseInspector
                 {
                     Log.Error($"Cannot find config file at: {options.ConfigPath} (full path: {Path.GetFullPath(options.ConfigPath)})");
                 }
+
+                return;
+            }
+
+            if (!Directory.Exists(options.Root))
+            {
+                Log.Error($"Cannot find directory given by -r: {options.Root}");
                 return;
             }
 
@@ -68,6 +74,7 @@ namespace LicenseInspector
             Log.Information($"Using package policies from {config.PackagePolicies}");
             Log.Information($"Using license policies from {config.LicensePolicies}");
             Log.Information($"Using license information from {config.LicenseInfo}");
+            Log.Information($"Using project information from {config.ProjectsInfo}");
 
             IFileAccess fileAccess = FileAccess.GetAccessor();
             var (dependencyScanner, licenseScanner) = await GetPlatformScanners(platform, fileAccess, config);
@@ -158,11 +165,13 @@ namespace LicenseInspector
             success = success && OkOrDefaultPathConfig(() => config.PackagePolicies.Split(","), nameof(config.PackagePolicies), "publicPackagePolicies.json, internalPackagePolicies.json");
             success = success && OkOrDefaultPathConfig(() => config.LicensePolicies, nameof(config.LicensePolicies), "licensePolicies.json");
             success = success && OkOrDefaultPathConfig(() => config.LicenseInfo, nameof(config.LicenseInfo), "licenses.json");
+            success = success && OkOrDefaultPathConfig(() => config.ProjectsInfo, nameof(config.ProjectsInfo), "projects.json");
 
             if (success)
             {
                 SetIfEmpty(config.LicensePolicies, () => config.LicensePolicies = "licensePolicies.json");
                 SetIfEmpty(config.LicenseInfo, () => config.LicenseInfo = "licenses.json");
+                SetIfEmpty(config.ProjectsInfo, () => config.ProjectsInfo = "projects.json");
                 foreach (var p in config.PackagePolicies.Split(","))
                 {
                     SetIfEmpty(config.PackagePolicies, () => config.PackagePolicies = "publicPackagePolicies.json, internalPackagePolicies.json");

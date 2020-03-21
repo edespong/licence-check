@@ -150,7 +150,7 @@ namespace LicenseInspector.DotNet
                     continue;
                 }
 
-                topLevelDependencies.Add(new PackageRange(package, version));
+                topLevelDependencies.Add(new PackageRange(package, version, csProjPath));
             }
 
             var noneIncludeNodes = csProj.SelectNodes("//*[local-name()='None'][@Include]");
@@ -186,7 +186,7 @@ namespace LicenseInspector.DotNet
             {
                 string id = node.Attributes["id"].Value;
                 string version = node.Attributes["version"].Value;
-                result.Add(new PackageRange(id, version));
+                result.Add(new PackageRange(id, version, csProjPath));
             }
 
             return result;

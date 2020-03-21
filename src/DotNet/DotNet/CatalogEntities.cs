@@ -98,5 +98,8 @@ namespace LicenseInspector.DotNet
 
         [JsonProperty("range")]
         public string VersionRange { get; set; }
+
+        [JsonIgnore]
+        public string OriginProject => throw new NotImplementedException();
     }
 }
