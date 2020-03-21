@@ -41,7 +41,12 @@ A license policy is specified on the following format:
 ```javascript
 {
     "License": "<SPDX License Identifier>|<unknown>|<not evaluated>|<internal>",
-    "Allow": <true|false>
+
+    // Optional (default: false). Is the license generally ok?
+    "Allow": <true|false>,
+
+    // Optional (default: false). Is the license ok for internal usage? See [Projects](#projects).
+    "AllowInternal": <true|false>
 }
 ```
 
@@ -52,6 +57,23 @@ A license policy is specified on the following format:
 `<internal>` is a special token given to packages where Location is given in the package policy.
 
 See [licensePolicies.json](src/Main/licensePolicies.json)
+
+## <a name="projects"></a>Projects
+
+The projects file allows you to specify paths to projects that are only used 
+internally and not distributed. In conjunction with a License policy, this
+allows you to specify that some licenses can be used if only used internally.
+
+A typical example of this is a testing framework with a restrictive license
+that you do not want to get a Violation from since it will never be distributed.
+
+```javascript
+{
+  "InternalProjects": [
+    "c:\\Code\\MyProject\\Tests\\UnitTest.csproj"
+  ]
+}
+```
 
 ## LicenseInfo
 

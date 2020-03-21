@@ -84,6 +84,7 @@ namespace LicenseInspector.DotNet.Tests
                 PackagePolicies = packagePoliciesPath,
                 LicensePolicies = licensePoliciesPath,
                 LicenseInfo = null,
+                ProjectsInfo = null,
                 IgnoreDuplicatePackages = true,
                 FollowLocations = false,
                 MinimumLicenseConfidenceThreshold = 1.0,

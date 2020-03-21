@@ -63,7 +63,7 @@ namespace LicenseInspector.JavaScript.Tests
                     {
                         Id = "test-package",
                         License = "BSD",
-                        Dependencies = new Dictionary<string, string> { },
+                        Dependencies = new Dictionary<string, string>(),
                         Version = "1.2.3"
                     };
                 }
@@ -86,6 +86,7 @@ namespace LicenseInspector.JavaScript.Tests
                 PackagePolicies = null,
                 LicensePolicies = null,
                 LicenseInfo = null,
+                ProjectsInfo = null,
                 IgnoreDuplicatePackages = true,
                 FollowLocations = false,
                 MinimumLicenseConfidenceThreshold = 1.0,

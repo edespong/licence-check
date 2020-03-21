@@ -49,7 +49,7 @@ namespace LicenseInspector
             Log.Debug($"Done");
 
             Log.Debug("Applying license and package policies..");
-            LicensePolicies licensePolicies = LicensePolicies.LoadFrom(this.config.LicensePolicies, this.config.PackagePolicies);
+            LicensePolicies licensePolicies = LicensePolicies.LoadFrom(this.config.LicensePolicies, this.config.PackagePolicies, this.config.ProjectsInfo);
             return licensePolicies.Apply(licensedDependencies);
         }
     }

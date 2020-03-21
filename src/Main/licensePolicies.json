@@ -17,6 +17,6 @@
   },
   {
     "License": "GPL-2.0-*",
-    "Allow": false
+    "AllowInternal": true
   }
 ]

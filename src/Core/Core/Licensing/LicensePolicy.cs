@@ -20,6 +20,11 @@ namespace LicenseInspector
         /// </summary>
         public bool Allow { get; set; }
 
+        /// <summary>
+        /// Specifies whether the license is okay to use for internal use or not.
+        /// </summary>
+        public bool AllowInternal { get; set; }
+
         public virtual bool IsMatch(string licenseId)
         {
             return License.Equals(licenseId, StringComparison.InvariantCultureIgnoreCase);

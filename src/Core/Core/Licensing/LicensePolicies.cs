@@ -13,13 +13,15 @@ namespace LicenseInspector
     {
         private readonly IEnumerable<LicensePolicy> policies;
         private readonly PackagePolicies packagePolicies;
+        private readonly Projects projects;
 
-        public LicensePolicies(IEnumerable<LicensePolicy> policies, PackagePolicies packagePolicies)
+        public LicensePolicies(IEnumerable<LicensePolicy> policies, PackagePolicies packagePolicies, Projects projects)
         {
             this.policies = policies
                 .Select(r => !r.License.EndsWith("*") ? r : new PrefixLicensePolicy(r))
                 .ToList();
             this.packagePolicies = packagePolicies;
+            this.projects = projects;
         }
 
         public IList<DependencyChain<EvaluatedPackage>> Apply(IEnumerable<DependencyChain<LicensedPackage>> packages)
@@ -58,17 +60,24 @@ namespace LicenseInspector
                 return new EvaluatedPackage(package, Evaluation.Violation, "Could not find license");
             }
 
+            if (policy.AllowInternal && this.projects.Contains(package.OriginProject))
+            {
+                return new EvaluatedPackage(package, Evaluation.Ok);
+            }
+
             return new EvaluatedPackage(package, policy.Allow ? Evaluation.Ok : Evaluation.Violation);
         }
 
-        public static LicensePolicies LoadFrom(string licensePoliciesPath, string packagePoliciesPath)
+        public static LicensePolicies LoadFrom(string licensePoliciesPath, string packagePoliciesPath, string projectsInfoPath)
         {
             var packagePolicies = PackagePolicies.LoadFrom(packagePoliciesPath);
 
             string str = File.ReadAllText(licensePoliciesPath);
             ICollection<LicensePolicy> policies = JsonConvert.DeserializeObject<List<LicensePolicy>>(str);
 
-            return new LicensePolicies(policies, packagePolicies);
+            var projects = Projects.LoadFrom(projectsInfoPath);
+
+            return new LicensePolicies(policies, packagePolicies, projects);
         }
     }
 }
