@@ -2,7 +2,6 @@
 using Serilog;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LicenseInspector.JavaScript
@@ -13,10 +12,13 @@ namespace LicenseInspector.JavaScript
 
         private readonly INpm npm;
 
+        private readonly DiskCacheItem cachePolicy;
+
         public NpmVersionResolver(INpm npm, DiskCacheConfig config)
         {
             this.npm = npm;
             npmOverviewPathFormatStr = Path.Combine(config.CacheRoot, "npmOverview", "{0}");
+            this.cachePolicy = config.NpmPackages;
         }
 
         public Task<Package?> GetSingleVersion(IPackageRange package)
@@ -27,43 +29,7 @@ namespace LicenseInspector.JavaScript
         private async Task<Package?> GetSingleVersion(string id, string versionRange, string originProject)
         {
             versionRange = versionRange.Trim();
-            if (versionRange.Contains("||"))
-            {
-                int i = versionRange.IndexOf("||");
-                return await GetSingleVersion(id, versionRange[(i + 2)..^0], originProject);
-            }
-
-            if (versionRange.StartsWith("^"))
-            {
-                string? version1 = await GetFullVersion(id, versionRange.Substring(1));
-                if (version1 == null) { return null; }
-                return new Package(id, version1, originProject);
-            }
-
-            if (versionRange.StartsWith("~"))
-            {
-                string? version2 = await GetFullVersion(id, versionRange.Substring(1));
-                if (version2 == null) { return null; }
-                return new Package(id, version2, originProject);
-            }
-
-            if (versionRange.StartsWith(">="))
-            {
-                string result = versionRange.Substring(2);
-
-                // ">= 1.2.3 < 2"
-                int lessIndex = result.IndexOf("<");
-                if (lessIndex >= 0)
-                {
-                    result = result.Substring(0, lessIndex);
-                }
-
-                string? version3 = await GetFullVersion(id, result.Trim());
-                if (version3 == null) { return null; }
-                return new Package(id, version3, originProject);
-            }
-
-            string? version = await GetFullVersion(id, versionRange);
+            string? version = await GetSingleVersion(id, versionRange);
             if (version == null)
             {
                 return null;
@@ -72,34 +38,30 @@ namespace LicenseInspector.JavaScript
             return new Package(id, version, originProject);
         }
 
-        private async Task<string?> GetFullVersion(string packageId, string version)
+        private async Task<string?> GetSingleVersion(string packageId, string versionRange)
         {
-            string filePath = GetPageCachePath(packageId, version);
-
-            Regex r = new Regex(@"(?<major>\d+)(?<minor>\.\d+)?(?<patch>.\d+)?");
-            Match m = r.Match(version);
-            if (!m.Success && version != "*")
+            NpmPackageOverview? packageOverview = null;
+            string filePath = GetPageCachePath(packageId, versionRange);
+            if (DiskCache.TryGetValue(filePath, this.cachePolicy, out packageOverview))
             {
-                Log.Warning($"Could not match version {version}. This will likely cause issues down the line.");
-                return null;
+                Log.Debug($"Got package overview from {filePath}");
+            }
+            else
+            {
+                packageOverview = await npm.GetPackageOverview(packageId).ContinueWith(CachePackageOverview);
+                Log.Debug($"Got package overview for {packageId}");
             }
 
-            if (m.Groups["minor"].Success && m.Groups["patch"].Success)
-            {
-                // Example: 1.2.3 or 1.2.3-preview1
-                return version;
-            }
-
-            var packageOverview = await npm.GetPackageOverview(packageId).ContinueWith(CachePackageOverview);
             if (packageOverview == null)
             {
-                Log.Warning($"Could not get package overview for {packageId}. Version was: {version}");
                 return null;
             }
 
             var versions = packageOverview.Versions.Select(x => new Version(x.Key));
-            var packageVersionRange = new Range(version);
-            return versions.LastOrDefault(v => packageVersionRange.IsSatisfied(v))?.ToString();
+            var packageVersionRange = new Range(versionRange);
+            string? result = versions.LastOrDefault(v => packageVersionRange.IsSatisfied(v))?.ToString();
+            Log.Verbose($"Resolved version for {packageId} {versionRange} -> {result ?? "<null>"}");
+            return result;
 
             NpmPackageOverview? CachePackageOverview(Task<NpmPackageOverview?> i)
             {
@@ -117,7 +79,7 @@ namespace LicenseInspector.JavaScript
         {
             string normalizedVersion = version
                 .Replace("*", "all")
-                .Replace(">=", "gte")
+                .Replace(">", "gt")
                 .Replace("<", "lt")
                 .Replace("||", "or")
                 .Replace(" ", "");
