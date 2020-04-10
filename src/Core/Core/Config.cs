@@ -38,7 +38,7 @@ namespace LicenseInspector
                     ResolvedDependencies = DiskCacheItem.NoCache,
                     LicenseFiles = DiskCacheItem.NoCache,
                     ResolvedLicenses = DiskCacheItem.NoCache,
-                    NpmPackages = DiskCacheItem.NoCache,
+                    NpmPackages = DiskCacheItem.NoCache
                 }
             };
         }

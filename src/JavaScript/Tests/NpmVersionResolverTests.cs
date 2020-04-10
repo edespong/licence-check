@@ -8,7 +8,7 @@ namespace LicenseInspector.JavaScript.Tests
     public class NpmVersionResolverTests
     {
         private readonly INpm npm = new FakeNpm();
-        private readonly DiskCacheConfig config = new DiskCacheConfig();
+        private readonly DiskCacheConfig config = Config.WithoutCache(new Config()).DiskCache;
 
         [Fact]
         public void FullVersion_CorrectResult()
@@ -17,7 +17,8 @@ namespace LicenseInspector.JavaScript.Tests
             const string version = "1.2.3";
             const string expected = "1.2.3";
 
-            var result = resolver.GetSingleVersion(new PackageRange("test", version, "")).Result;
+            var package = new PackageRange("test", version, "");
+            var result = resolver.GetSingleVersion(package).Result;
 
             Assert.Equal(expected, result.Version);
         }
@@ -90,7 +91,9 @@ namespace LicenseInspector.JavaScript.Tests
                         Id = packageId,
                         Versions = new Dictionary<string, object> {
                             { "1.1.0", new object() },
+                            { "1.2.3", new object() },
                             { "1.2.4", new object() },
+                            { "1.0.0-preview2-final", new object() },
                             { "1.9.1", new object() }
                         }
                     };
