@@ -35,7 +35,7 @@ namespace LicenseInspector.JavaScript
         public async Task<IList<DependencyChain<AnalyzedPackage>>> FindPackageDependencies(string root)
         {
             var topLevelDependencies = GetTopLevelDependencies(root);
-            return await FindPackageDependencies(topLevelDependencies);
+            return await FindPackageDependencies(topLevelDependencies, new HashSet<string>());
         }
 
         private IList<PackageRange> GetTopLevelDependencies(string root)
@@ -51,11 +51,12 @@ namespace LicenseInspector.JavaScript
             return packageJson.Dependencies.Select(x => new PackageRange(x.Key, x.Value, path));
         }
 
-        internal async Task<IList<DependencyChain<AnalyzedPackage>>> FindPackageDependencies(IEnumerable<PackageRange> packages)
+        internal async Task<IList<DependencyChain<AnalyzedPackage>>> FindPackageDependencies(IEnumerable<PackageRange> packages,
+            HashSet<string> upstreamDependencies)
         {
             var packagesToResolved = packages
                 .Where(p => !this.packagePolicies.IgnorePackage(p.Id))
-                .Select(p => (Package: p, Resolved: this.versionResolver.GetSingleVersion(p)))
+                .Select(p => (Package: p, Resolved: this.versionResolver.GetSingleVersion(p).Result))
                 .ToList();
 
             List<DependencyChain<AnalyzedPackage>> result = packagesToResolved
@@ -65,14 +66,21 @@ namespace LicenseInspector.JavaScript
                 .ToList();
 
             var validPackages = packagesToResolved.Select(t => t.Resolved);
-            var dependencies = validPackages.Select(async packageTask =>
+            var dependencies = validPackages.Select(async package =>
             {
-                var package = await packageTask;
                 if (package == null)
                 {
                     return null;
                 }
-                return await FindPackageDependencies(package);
+      
+                var upstream = new HashSet<string>(upstreamDependencies);
+                if (!upstream.Add(package.Id))
+                {
+                    Log.Information($"Cyclic dependency found. Package {package.Id} was found in the upstream dependencies.");
+                    return null;
+                }
+
+                return await FindPackageDependencies(package, upstream);
             }).ToArray();
 
             await Task.WhenAll(dependencies);
@@ -82,7 +90,7 @@ namespace LicenseInspector.JavaScript
             return result;
         }
 
-        internal async Task<DependencyChain<AnalyzedPackage>> FindPackageDependencies(Package package)
+        internal async Task<DependencyChain<AnalyzedPackage>> FindPackageDependencies(Package package, HashSet<string> upstreamDependencies)
         {
             string resolvedDependenciesPath = string.Format(this.resolvedPathFormatStr, package.Id, package.Version);
             if (DiskCache.TryGetValue(resolvedDependenciesPath, this.config.ResolvedDependencies, out DependencyChain<AnalyzedPackage>? cached))
@@ -106,7 +114,8 @@ namespace LicenseInspector.JavaScript
             var analyzedPackage = new AnalyzedPackage(package);
 
             var packageDependencies = npmPackage.Dependencies ?? new Dictionary<string, string>();
-            var dependencies = await FindPackageDependencies(packageDependencies.Select(x => new PackageRange(x.Key, x.Value, package.OriginProject)));
+            var ds = packageDependencies.Select(x => new PackageRange(x.Key, x.Value, package.OriginProject));
+            var dependencies = await FindPackageDependencies(ds, upstreamDependencies);
 
             var result = new DependencyChain<AnalyzedPackage>(analyzedPackage, dependencies);
             CacheDependencies(package, result);
